@@ -1,15 +1,45 @@
-const { ethers } = require("ethers");
+import { ethers } from "ethers";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+// Get __dirname in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load environment variables
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
 async function executeSwap() {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    console.log("Loaded PRIVATE_KEY:", process.env.PRIVATE_KEY ? "✅ Loaded" : "❌ Missing");
+    console.log("Loaded RPC_URL:", process.env.RPC_URL ? "✅ Loaded" : "❌ Missing");
+    console.log("Loaded CONTRACT_ADDRESS:", process.env.CONTRACT_ADDRESS ? "✅ Loaded" : "❌ Missing");
+    
+    if (!process.env.PRIVATE_KEY || !process.env.RPC_URL || !process.env.CONTRACT_ADDRESS) {
+        throw new Error("Please set PRIVATE_KEY, RPC_URL, and CONTRACT_ADDRESS in your .env file");
+    }
+
+    // ✅ FIXED: Use correct provider syntax for Ethers v6
+    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
-    const contract = new ethers.Contract("<DEPLOYED_CONTRACT_ADDRESS>", ["function swapTokens(uint256, string)"], wallet);
+    // Smart contract ABI (Replace with actual ABI JSON)
+    const contractABI = [
+        "function swapTokens(uint256 amount, string network)"
+    ];
 
-    const tx = await contract.swapTokens(100, "Binance Smart Chain");
-    await tx.wait();
+    // Initialize contract
+    const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, contractABI, wallet);
 
-    console.log("Swap executed successfully!");
+    try {
+        console.log("🚀 Executing Swap...");
+        const tx = await contract.swapTokens(100, "Binance Smart Chain");
+        await tx.wait();
+        console.log("✅ Swap executed successfully!");
+    } catch (error) {
+        console.error("❌ Transaction failed:", error);
+    }
 }
 
-executeSwap();
+executeSwap().catch(console.error);
