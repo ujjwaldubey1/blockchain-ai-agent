@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { JsonRpcProvider, Wallet, Contract } from "ethers";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -17,20 +17,20 @@ async function executeSwap() {
     console.log("Loaded CONTRACT_ADDRESS:", process.env.CONTRACT_ADDRESS ? "✅ Loaded" : "❌ Missing");
     
     if (!process.env.PRIVATE_KEY || !process.env.RPC_URL || !process.env.CONTRACT_ADDRESS) {
-        throw new Error("Please set PRIVATE_KEY, RPC_URL, and CONTRACT_ADDRESS in your .env file");
+        throw new Error("❌ Please set PRIVATE_KEY, RPC_URL, and CONTRACT_ADDRESS in your .env file");
     }
 
-    // ✅ FIXED: Use correct provider syntax for Ethers v6
-    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    // ✅ Correct Ethers v6 Syntax
+    const provider = new JsonRpcProvider(process.env.RPC_URL);
+    const wallet = new Wallet(process.env.PRIVATE_KEY, provider);  // ✅ Removed `ethers.Wallet`
 
-    // Smart contract ABI (Replace with actual ABI JSON)
+    // ✅ Smart contract ABI (Replace with actual ABI JSON)
     const contractABI = [
         "function swapTokens(uint256 amount, string network)"
     ];
 
-    // Initialize contract
-    const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, contractABI, wallet);
+    // ✅ Initialize contract using named import
+    const contract = new Contract(process.env.CONTRACT_ADDRESS, contractABI, wallet);
 
     try {
         console.log("🚀 Executing Swap...");
