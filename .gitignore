@@ -1,2 +1,57 @@
-node_modules
-node_modules
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+package-lock.json
+yarn.lock
+.pnp/
+.pnp.js
+
+# Hardhat build artifacts & cache
+artifacts/
+cache/
+typechain/
+typechain-types/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Hardhat network state
+hardhat-node/
+coverage/
+coverage.json
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# Logs & temp files
+logs/
+*.log
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+
+# Ethereum wallet & keys (important for security)
+*.secret
+keystore/
+*.keystore
+
+# Ignoring compiled contracts & generated files
+*.sol.js
+*.sol.ts
+out/
+
+# Debugging & test artifacts
+test-results/
+coverage/
+
+# MacOS system files
+*.DS_Store
+
+# Windows system files
+Thumbs.db
