@@ -8,10 +8,13 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load environment variables
+// Load environment variables from the correct path (backend/.env)
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
 async function executeSwap() {
+    // Debug: Print the path where we're looking for .env
+    console.log("📁 Loading environment variables from:", path.join(__dirname, "../.env"));
+    
     console.log("Loaded PRIVATE_KEY:", process.env.PRIVATE_KEY ? "✅ Loaded" : "❌ Missing");
     console.log("Loaded RPC_URL:", process.env.RPC_URL ? "✅ Loaded" : "❌ Missing");
     console.log("Loaded CONTRACT_ADDRESS:", process.env.CONTRACT_ADDRESS ? "✅ Loaded" : "❌ Missing");

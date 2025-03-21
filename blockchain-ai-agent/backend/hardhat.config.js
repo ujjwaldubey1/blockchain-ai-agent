@@ -1,27 +1,38 @@
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
-import dotenv from "dotenv";
+const sepoliaRpcUrl = process.env.SEPOLIA_RPC_URL || "";
+const privateKey = process.env.PRIVATE_KEY || "";
 
-dotenv.config();
-
-const config = {
-  solidity: "0.8.17",
+const config: HardhatUserConfig = {
+  solidity: {
+    version: "0.8.17",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
+  },
   networks: {
     localhost: {
       url: "http://127.0.0.1:8545"
     },
-    // Only include these if you have the environment variables set
-    ...(process.env.RPC_URL && process.env.PRIVATE_KEY ? {
-      mainnet: {
-        url: process.env.RPC_URL,
-        accounts: [process.env.PRIVATE_KEY]
-      },
-      sepolia: {
-        url: process.env.RPC_URL,
-        accounts: [process.env.PRIVATE_KEY]
-      }
-    } : {})
+    hardhat: {
+      forking: process.env.MAINNET_RPC_URL
+        ? { url: process.env.MAINNET_RPC_URL }
+        : undefined
+    },
+    ...(privateKey
+      ? {
+          mainnet: {
+            url: process.env.MAINNET_RPC_URL || "",
+            accounts: [privateKey],
+            chainId: 1
+          },
+          sepolia: {
+            url: sepoliaRpcUrl, // Ensure it's not undefined
+            accounts: [privateKey],
+            chainId: 11155111
+          }
+        }
+      : {})
   }
 };
-
-export default config; 

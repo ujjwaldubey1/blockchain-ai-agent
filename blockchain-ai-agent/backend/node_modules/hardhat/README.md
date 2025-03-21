@@ -8,6 +8,12 @@ Built by the [Nomic Foundation](https://nomic.foundation/) for the Ethereum comm
 
 Join our [Hardhat Support Discord server](https://hardhat.org/discord) to stay up to date on new releases, plugins and tutorials.
 
+---
+
+> 💡 **The Nomic Foundation is hiring! Check [our open positions](https://www.nomic.foundation/jobs?utm_source=myALpQnzlM).**
+
+---
+
 ## Installation
 
 To install Hardhat, go to an empty folder, initialize an `npm` project (i.e. `npm init`), and run
@@ -19,7 +25,7 @@ npm install --save-dev hardhat
 Once it's installed, just run this command and follow its instructions:
 
 ```
-npx hardhat
+npx hardhat init
 ```
 
 ## Documentation
@@ -34,7 +40,7 @@ On [Hardhat's website](https://hardhat.org) you will find:
 
 Contributions are always welcome! Feel free to open any issue or send a pull request.
 
-Go to [CONTRIBUTING.md](./CONTRIBUTING.md) to learn about how to set up Hardhat's development environment.
+Go to [CONTRIBUTING.md](https://github.com/NomicFoundation/hardhat/blob/main/CONTRIBUTING.md) to learn about how to set up Hardhat's development environment.
 
 ## Feedback, help and news
 

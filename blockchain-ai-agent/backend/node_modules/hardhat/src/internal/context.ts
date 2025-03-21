@@ -1,14 +1,16 @@
 import {
   ConfigExtender,
   EnvironmentExtender,
-  ExperimentalHardhatNetworkMessageTraceHook,
   HardhatRuntimeEnvironment,
   ProviderExtender,
 } from "../types";
 
 import { assertHardhatInvariant, HardhatError } from "./core/errors";
 import { ERRORS } from "./core/errors-list";
+import { VarsManagerSetup } from "./core/vars/vars-manager-setup";
+import { VarsManager } from "./core/vars/vars-manager";
 import { TasksDSL } from "./core/tasks/dsl";
+import { getVarsFilePath } from "./util/global-dir";
 import { getRequireCachedFiles } from "./util/platform";
 
 export type GlobalWithHardhatContext = typeof global & {
@@ -16,6 +18,10 @@ export type GlobalWithHardhatContext = typeof global & {
 };
 
 export class HardhatContext {
+  constructor() {
+    this.varsManager = new VarsManager(getVarsFilePath());
+  }
+
   public static isCreated(): boolean {
     const globalWithHardhatContext = global as GlobalWithHardhatContext;
     return globalWithHardhatContext.__hardhatContext !== undefined;
@@ -49,13 +55,10 @@ export class HardhatContext {
   public readonly environmentExtenders: EnvironmentExtender[] = [];
   public environment?: HardhatRuntimeEnvironment;
   public readonly providerExtenders: ProviderExtender[] = [];
+  public varsManager: VarsManager | VarsManagerSetup;
 
   public readonly configExtenders: ConfigExtender[] = [];
 
-  // NOTE: This is experimental and will be removed. Please contact our team if
-  // you are planning to use it.
-  public readonly experimentalHardhatNetworkMessageTraceHooks: ExperimentalHardhatNetworkMessageTraceHook[] =
-    [];
   private _filesLoadedBeforeConfig?: string[];
   private _filesLoadedAfterConfig?: string[];
 

@@ -254,6 +254,33 @@ export class AutomaticGasPriceProvider extends ProviderWrapper {
         ],
       })) as { baseFeePerGas: string[]; reward: string[][] };
 
+      let maxPriorityFeePerGas = rpcQuantityToBigInt(response.reward[0][0]);
+
+      if (maxPriorityFeePerGas === 0n) {
+        try {
+          const suggestedMaxPriorityFeePerGas =
+            (await this._wrappedProvider.request({
+              method: "eth_maxPriorityFeePerGas",
+              params: [],
+            })) as string;
+
+          maxPriorityFeePerGas = rpcQuantityToBigInt(
+            suggestedMaxPriorityFeePerGas
+          );
+        } catch {
+          // if eth_maxPriorityFeePerGas does not exist, use 1 wei
+          maxPriorityFeePerGas = 1n;
+        }
+      }
+
+      // If after all of these we still have a 0 wei maxPriorityFeePerGas, we
+      // use 1 wei. This is to improve the UX of the automatic gas price
+      // on chains that are very empty (i.e local testnets). This will be very
+      // unlikely to trigger on a live chain.
+      if (maxPriorityFeePerGas === 0n) {
+        maxPriorityFeePerGas = 1n;
+      }
+
       return {
         // Each block increases the base fee by 1/8 at most, when full.
         // We have the next block's base fee, so we compute a cap for the
@@ -268,7 +295,7 @@ export class AutomaticGasPriceProvider extends ProviderWrapper {
             (AutomaticGasPriceProvider.EIP1559_BASE_FEE_MAX_FULL_BLOCKS_PREFERENCE -
               1n),
 
-        maxPriorityFeePerGas: rpcQuantityToBigInt(response.reward[0][0]),
+        maxPriorityFeePerGas,
       };
     } catch {
       this._nodeHasFeeHistory = false;

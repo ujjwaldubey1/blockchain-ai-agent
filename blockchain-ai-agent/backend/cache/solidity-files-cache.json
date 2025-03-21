@@ -103,9 +103,84 @@
       ]
     },
     "C:\\Users\\EK522WS\\blockchain-ai-agent.git\\blockchain-ai-agent\\backend\\contracts\\SwapContract.sol": {
-      "lastModificationDate": 1742361543906,
-      "contentHash": "4e59ac0888baea5ce455ac100ac1c16f",
+      "lastModificationDate": 1742575940968,
+      "contentHash": "878b4a15e50889f41eb2f1a1ae382da3",
       "sourceName": "contracts/SwapContract.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "IWETH",
+        "SwapContract"
+      ]
+    },
+    "C:\\Users\\EK522WS\\blockchain-ai-agent.git\\blockchain-ai-agent\\backend\\node_modules\\@uniswap\\v3-periphery\\contracts\\interfaces\\ISwapRouter.sol": {
+      "lastModificationDate": 1742574069409,
+      "contentHash": "ffd42687b3db01d30c24213d961fcf9f",
+      "sourceName": "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@uniswap/v3-core/contracts/interfaces/callback/IUniswapV3SwapCallback.sol"
+      ],
+      "versionPragmas": [
+        ">=0.7.5"
+      ],
+      "artifacts": [
+        "ISwapRouter"
+      ]
+    },
+    "C:\\Users\\EK522WS\\blockchain-ai-agent.git\\blockchain-ai-agent\\backend\\node_modules\\@uniswap\\v3-core\\contracts\\interfaces\\callback\\IUniswapV3SwapCallback.sol": {
+      "lastModificationDate": 1742574064254,
+      "contentHash": "a8ba2d37b0107911ae0e3b0e123cbd83",
+      "sourceName": "@uniswap/v3-core/contracts/interfaces/callback/IUniswapV3SwapCallback.sol",
       "solcConfig": {
         "version": "0.8.17",
         "settings": {
@@ -131,10 +206,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.17"
+        ">=0.5.0"
       ],
       "artifacts": [
-        "SwapContract"
+        "IUniswapV3SwapCallback"
       ]
     }
   }
