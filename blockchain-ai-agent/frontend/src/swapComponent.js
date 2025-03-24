@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getSwapData } from "./utils/contractService";
+import { getSwapData } from "./utils/contractService"
 
 function SwapComponent() {
     const [swapInfo, setSwapInfo] = useState(null);
