@@ -5,7 +5,8 @@ const getProvider = () => {
         console.error("No Ethereum wallet found!");
         return null;
     }
-    return new ethers.providers.Web3Provider(window.ethereum);
+    console.log("MetaMask detected:", window.ethereum);
+    return new ethers.BrowserProvider(window.ethereum); // ✅ Update this line
 };
 
 export default getProvider;
