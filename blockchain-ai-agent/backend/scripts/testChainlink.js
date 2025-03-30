@@ -48,15 +48,15 @@ async function getChainlinkPrice() {
         let provider;
         try {
             console.log("🔄 Trying Infura connection...");
-            provider = new ethers.JsonRpcProvider(process.env.INFURA_RPC_URL);
+            provider = new ethers.providers.JsonRpcProvider(process.env.INFURA_RPC_URL);
         } catch (error) {
             console.log("⚠️ Infura connection failed, falling back to Alchemy...");
-            provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+            provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
         }
 
         const oracle = new ethers.Contract(oracleAddress, abi, provider);
         const price = await oracle.latestAnswer();
-        const formattedPrice = parseFloat(ethers.formatUnits(price, 8));
+        const formattedPrice = parseFloat(ethers.utils.formatUnits(price, 8));
 
         console.log(`✅ ETH/USD Price from Chainlink: $${formattedPrice}`);
 
@@ -81,10 +81,10 @@ async function executeSwap() {
         let provider;
         try {
             console.log("🔄 Trying Infura connection...");
-            provider = new ethers.JsonRpcProvider(process.env.INFURA_RPC_URL);
+            provider = new ethers.providers.JsonRpcProvider(process.env.INFURA_RPC_URL);
         } catch (error) {
             console.log("⚠️ Infura connection failed, falling back to Alchemy...");
-            provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+            provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
         }
 
         const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
