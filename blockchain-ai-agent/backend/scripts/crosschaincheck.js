@@ -1,4 +1,5 @@
-import { ethers } from 'ethers';
+import pkg from 'ethers';
+const { JsonRpcProvider, Wallet, Contract } = pkg;
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -13,9 +14,9 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 
 console.log("Using RPC URL:", process.env.SEPOLIA_RPC_URL);
 
-// Use providers.JsonRpcProvider for ethers v6
-const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+// Use JsonRpcProvider directly since we imported it
+const provider = new JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
+const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
 
 async function checkLayerZero() {
     try {

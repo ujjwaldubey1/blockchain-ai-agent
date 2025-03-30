@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { JsonRpcProvider, Wallet, Contract } from 'ethers';
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -23,14 +23,14 @@ async function executeSwap() {
     }
 
     // Use providers.JsonRpcProvider for ethers v6
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
-    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    const provider = new JsonRpcProvider(process.env.RPC_URL);
+    const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
 
     const contractABI = [
         "function swapTokens(uint256 amount, string network)"
     ];
 
-    const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, contractABI, wallet);
+    const contract = new Contract(process.env.CONTRACT_ADDRESS, contractABI, wallet);
 
     try {
         console.log("🚀 Executing Swap...");
