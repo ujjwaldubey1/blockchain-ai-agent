@@ -1,4 +1,4 @@
-import { JsonRpcProvider, Wallet, Contract } from 'ethers';
+import { ethers } from "ethers";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -13,30 +13,36 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 
 async function executeSwap() {
     console.log("📁 Loading environment variables from:", path.join(__dirname, "../.env"));
-    
-    console.log("Loaded PRIVATE_KEY:", process.env.PRIVATE_KEY ? "✅ Loaded" : "❌ Missing");
-    console.log("Loaded RPC_URL:", process.env.RPC_URL ? "✅ Loaded" : "❌ Missing");
-    console.log("Loaded CONTRACT_ADDRESS:", process.env.CONTRACT_ADDRESS ? "✅ Loaded" : "❌ Missing");
-    
-    if (!process.env.PRIVATE_KEY || !process.env.RPC_URL || !process.env.CONTRACT_ADDRESS) {
-        throw new Error("❌ Please set PRIVATE_KEY, RPC_URL, and CONTRACT_ADDRESS in your .env file");
+
+    const { PRIVATE_KEY, SEPOLIA_RPC_URL , CONTRACT_ADDRESS } = process.env;
+
+    if (!PRIVATE_KEY || !SEPOLIA_RPC_URL || !CONTRACT_ADDRESS) {
+        console.error("❌ Missing required environment variables. Check your .env file.");
+        console.log(`PRIVATE_KEY: ${PRIVATE_KEY ? "✅ Loaded" : "❌ Missing"}`);
+        console.log(`SEPOLIA_RPC_URL: ${SEPOLIA_RPC_URL ? "✅ Loaded" : "❌ Missing"}`);
+        console.log(`CONTRACT_ADDRESS: ${CONTRACT_ADDRESS ? "✅ Loaded" : "❌ Missing"}`);
+        process.exit(1);
     }
 
-    // Use providers.JsonRpcProvider for ethers v6
-    const provider = new JsonRpcProvider(process.env.RPC_URL);
-    const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
-
-    const contractABI = [
-        "function swapTokens(uint256 amount, string network)"
-    ];
-
-    const contract = new Contract(process.env.CONTRACT_ADDRESS, contractABI, wallet);
-
     try {
+        console.log("🔗 Connecting to blockchain...");
+        const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
+        const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+
+        const contractABI = [
+            "function swapTokens(uint256 amount, string memory network) public"
+        ];
+
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, wallet);
+
         console.log("🚀 Executing Swap...");
-        const tx = await contract.swapTokens(100, "Binance Smart Chain");
+        const amount = ethers.utils.parseUnits("100", 18); // Assuming 18 decimal tokens
+        const tx = await contract.swapTokens(amount, "Binance Smart Chain");
+
+        console.log("⏳ Waiting for transaction confirmation...");
         await tx.wait();
-        console.log("✅ Swap executed successfully!");
+
+        console.log("✅ Swap executed successfully! Tx Hash:", tx.hash);
     } catch (error) {
         console.error("❌ Transaction failed:", error);
     }
