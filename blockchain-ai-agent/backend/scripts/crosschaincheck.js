@@ -1,18 +1,21 @@
-import { ethers } from "ethers";
+import { ethers } from 'ethers';
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-// Get the root directory path
+// Get __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
-// Load .env from the root directory
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+// Load environment variables
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
-console.log("Using RPC URL:", process.env.RPC_URL); // Debugging check
+console.log("Using RPC URL:", process.env.SEPOLIA_RPC_URL);
 
-const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+// Use providers.JsonRpcProvider for ethers v6
+const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
 async function checkLayerZero() {
     try {
@@ -24,3 +27,15 @@ async function checkLayerZero() {
 }
 
 checkLayerZero();
+
+// Example function to check connection
+async function checkConnection() {
+    try {
+        const blockNumber = await provider.getBlockNumber();
+        console.log("✅ Connected to network! Current block:", blockNumber);
+    } catch (error) {
+        console.error("❌ Connection failed:", error);
+    }
+}
+
+checkConnection().catch(console.error);
